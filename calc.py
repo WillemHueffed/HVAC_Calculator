@@ -1,8 +1,8 @@
+import math
+
 CFM = 800
 GOAL_FRICTION = 0.08
 VARIANCE = 0.02
-
-import math
 
 
 class HVACPipingCalculator:
@@ -274,35 +274,6 @@ class HVACPipingCalculator:
             math.pi**4 * diameter**5
         )
         return pressure_drop
-
-    def calculate(self):
-        print("Select an option:")
-        print("1. Calculate pipe size")
-        print("2. Calculate fluid velocity")
-        print("3. Calculate pressure drop")
-        choice = input("Enter your choice (1/2/3): ")
-
-        if choice == "1":
-            flow_rate = float(input("Enter flow rate (in m^3/s): "))
-            velocity = float(input("Enter desired velocity (in m/s): "))
-            diameter = self.calculate_pipe_size(flow_rate, velocity)
-            print("Required pipe diameter: {:.2f} meters".format(diameter))
-        elif choice == "2":
-            flow_rate = float(input("Enter flow rate (in m^3/s): "))
-            diameter = float(input("Enter pipe diameter (in meters): "))
-            velocity = self.calculate_velocity(flow_rate, diameter)
-            print("Fluid velocity: {:.2f} m/s".format(velocity))
-        elif choice == "3":
-            flow_rate = float(input("Enter flow rate (in m^3/s): "))
-            diameter = float(input("Enter pipe diameter (in meters): "))
-            length = float(input("Enter pipe length (in meters): "))
-            viscosity = float(input("Enter fluid viscosity (in Pa.s): "))
-            pressure_drop = self.calculate_pressure_drop(
-                flow_rate, diameter, length, viscosity
-            )
-            print("Pressure drop: {:.2f} Pa".format(pressure_drop))
-        else:
-            print("Invalid choice. Please select 1, 2, or 3.")
 
 
 if __name__ == "__main__":
