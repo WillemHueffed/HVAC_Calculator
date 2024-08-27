@@ -1,0 +1,25 @@
+.tableDiv {
+  height: 300px;
+  max-width: 400px;
+  font-size: 24px;
+  border: 1px solid #ccc;
+  overflow: auto;
+}
+
+.frictionTable {
+  padding: 5px;
+  display: inline-block;
+}
+
+.container {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header {
+  text-align: center;
+}
