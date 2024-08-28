@@ -179,7 +179,7 @@ const InputComponent: React.FC<FormValuesProp> = ({
           <br />
         </form>
       </div>
-      <div className={styles.container}>
+      <div>
         <form>
           <input
             type="radio"
@@ -377,53 +377,71 @@ export default function Home() {
     <>
       <HeaderComponent />
       <div className={styles.container}>
-        <InputComponent formValues={formValues} setFormValues={setFormValues} />
-        {validateInput(formValues) && (
-          <div className={styles.container}>
-            <button
-              onClick={(e) => {
-                setIsSubmitted(true);
-                formValues.conduitType == "Pipe"
-                  ? setTableData(
-                    calculatePipeFrictions(
-                      PIPE_DIAMETERS,
-                      formValues.CFM,
-                      formValues.goalFriction,
-                    ),
-                  )
-                  : setTableData(
-                    calculateTubeFrictions(
-                      TUBE_DIMENSIONS,
-                      formValues.CFM,
-                      formValues.goalFriction,
-                    ),
-                  );
-              }}
-            >
-              Submit
-            </button>
-          </div>
-        )}
+        <div className={styles.inputContainer}>
+          <InputComponent
+            formValues={formValues}
+            setFormValues={setFormValues}
+          />
+          {validateInput(formValues) && (
+            <div className={styles.container}>
+              <button
+                onClick={(e) => {
+                  setIsSubmitted(true);
+                  formValues.conduitType == "Pipe"
+                    ? setTableData(
+                      calculatePipeFrictions(
+                        PIPE_DIAMETERS,
+                        formValues.CFM,
+                        formValues.goalFriction,
+                      ),
+                    )
+                    : setTableData(
+                      calculateTubeFrictions(
+                        TUBE_DIMENSIONS,
+                        formValues.CFM,
+                        formValues.goalFriction,
+                      ),
+                    );
+                }}
+              >
+                Submit
+              </button>
+            </div>
+          )}
+        </div>
         {isSubmitted && (
           <div className={styles.tableDiv}>
-            <table className={styles.frictionTable}>
+            <table id="frictionTable" className={styles.frictionTable}>
               <thead>
                 <tr>
-                  {Object.keys(tableData[0]).map((column) => (
-                    <th key={column}>{column}</th>
-                  ))}
+                  {Object.keys(tableData[0])
+                    .filter((column) => column !== "color" && column !== "rank")
+                    .map((column) => (
+                      <th key={column}>{column}</th>
+                    ))}
                 </tr>
               </thead>
               <tbody className={styles.frictionTable}>
                 {tableData.map((row, rowIndex) => (
                   <tr key={rowIndex}>
-                    {Object.keys(tableData[0]).map((column) => (
-                      <td key={column}>{row[column]}</td>
-                    ))}
+                    {Object.keys(tableData[0])
+                      .filter(
+                        (column) => column !== "color" && column !== "rank",
+                      )
+                      .map((column) => (
+                        <td key={column}>{row[column]}</td>
+                      ))}
                   </tr>
                 ))}
               </tbody>
             </table>
+            {
+              const table = document.getElementById("frictionTable")
+            for (let i=0; i<table.rows; i++){
+              if (tableData[i].color == GREEN){
+              //do thing
+            }
+              }}
           </div>
         )}
       </div>
