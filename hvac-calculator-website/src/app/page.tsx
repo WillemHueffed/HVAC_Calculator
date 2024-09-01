@@ -147,13 +147,13 @@ const InputComponent: React.FC<FormValuesProp> = ({
   };
   return (
     <>
-      <div className={styles.container}>
-        <form className={styles.inputForm}>
+      <div>
+        <form>
           <label>CFM</label>
           <br />
           <input
             type="number"
-            defaultValue={CFM_DEFAULT}
+            value={CFM_DEFAULT}
             name="CFM"
             onInput={handleChange}
           />
@@ -162,7 +162,7 @@ const InputComponent: React.FC<FormValuesProp> = ({
           <br />
           <input
             type="number"
-            defaultValue={FRICTION_DEFAULT}
+            value={FRICTION_DEFAULT}
             name="goalFriction"
             onInput={handleChange}
           />
@@ -186,7 +186,7 @@ const InputComponent: React.FC<FormValuesProp> = ({
               value="Pipe"
               name="conduitType"
               onChange={handleChange}
-              checked
+              checked={formValues.conduitType === "Pipe"}
             />
             <label>Pipe</label>
             <br />
@@ -228,6 +228,42 @@ const InputComponent: React.FC<FormValuesProp> = ({
 
 function HeaderComponent() {
   return <h1 className={styles.header}>HVAC Calculator</h1>;
+}
+
+function TableComponent(tableData: calculatedTube[] | calculatedPipe[]) {
+  return (
+    <div className={styles.tableDiv}>
+      {tableData.length > 0 && (
+        <div>
+          <table id="frictionTable" className={styles.dataTable}>
+            <thead>
+              <tr>
+                {Object.keys(tableData[0])
+                  .filter((column) => column !== "color" && column !== "rank")
+                  .map((column) => (
+                    <th key={column}>{column}</th>
+                  ))}
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.map((row, rowIndex) => (
+                <tr
+                  key={rowIndex}
+                  style={(styles.test, { backgroundColor: row.color })}
+                >
+                  {Object.keys(tableData[0])
+                    .filter((column) => column !== "color" && column !== "rank")
+                    .map((column) => (
+                      <td key={column}>{row[column]}</td>
+                    ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
 }
 
 interface calculatedPipe {
@@ -396,72 +432,14 @@ export default function Home() {
     <>
       <body>
         <HeaderComponent />
-        <div className={styles.container}>
-          <div className={styles.inputContainer}>
+        <div className={styles.flexDiv}>
+          <div className={styles.inputContainerDiv}>
             <InputComponent
               formValues={formValues}
               setFormValues={setFormValues}
             />
-            {validateInput(formValues) && (
-              <div className={styles.container}>
-                {/*
-                <button
-                  className={styles.inputButton}
-                  onClick={(e) => {
-                    setIsSubmitted(true);
-                    formValues.conduitType == "Pipe"
-                      ? setTableData(
-                          calculatePipeFrictions(
-                            PIPE_DIAMETERS,
-                            formValues.CFM,
-                            formValues.goalFriction,
-                          ),
-                        )
-                      : setTableData(
-                          calculateTubeFrictions(
-                            TUBE_DIMENSIONS,
-                            formValues.CFM,
-                            formValues.goalFriction,
-                          ),
-                        );
-                  }}
-                >
-                  Submit
-                </button>
-                */}
-              </div>
-            )}
           </div>
-          {tableData.length && (
-            <div className={styles.tableDiv}>
-              <table id="frictionTable" className={styles.frictionTable}>
-                <thead>
-                  <tr>
-                    {Object.keys(tableData[0])
-                      .filter(
-                        (column) => column !== "color" && column !== "rank",
-                      )
-                      .map((column) => (
-                        <th key={column}>{column}</th>
-                      ))}
-                  </tr>
-                </thead>
-                <tbody className={styles.frictionTable}>
-                  {tableData.map((row, rowIndex) => (
-                    <tr key={rowIndex} style={{ backgroundColor: row.color }}>
-                      {Object.keys(tableData[0])
-                        .filter(
-                          (column) => column !== "color" && column !== "rank",
-                        )
-                        .map((column) => (
-                          <td key={column}>{row[column]}</td>
-                        ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+          {TableComponent(tableData)}
         </div>
       </body>
     </>

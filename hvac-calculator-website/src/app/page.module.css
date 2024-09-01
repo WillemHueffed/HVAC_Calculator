@@ -1,41 +1,42 @@
-.tableDiv {
-  height: 300px;
-  max-width: 400px;
-  font-size: 24px;
-  border: 1px solid #ccc;
-  overflow: auto;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.inputButton {
-  border: none;
-  border-radius: 0.5rem;
-}
-
-.frictionTable {
-  padding: 5px;
-}
-
-.inputContainer {
-  margin: auto;
-  width: 50%;
-}
-
-.container {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: #ffffff;
-}
-
 .header {
   text-align: center;
 }
 
-.inputForm input {
-  border: none;
-  background-color: #f0f0f0;
-  border-radius: 0.5rem;
+.inputContainerDiv {
+}
+
+.flexDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.tableDiv {
+  max-height: 300px;
+  max-width: 400px;
+  font-size: 20px;
+  border: 2px solid #ccc;
+  overflow: auto;
+}
+
+.dataTable {
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  width: 100%;
+}
+
+.dataTable td {
+  padding: 5px;
+}
+
+.dataTable tr {
+  border-bottom: 100px solid #3498db;
+}
+
+.test {
+  border-bottom: 100px solid #3498db;
+}
+
+.dataTable tr:last-child {
+  border-bottom: none;
 }
