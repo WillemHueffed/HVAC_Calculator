@@ -1,7 +1,7 @@
 "use client";
 import styles from "./page.module.css";
 import "./globals.css";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
 
 const CFM_DEFAULT = 800;
 const FRICTION_DEFAULT = 0.08;
@@ -294,8 +294,6 @@ function calculatePipeFrictions(
   calculatedPipes.sort(
     (x: calculatedPipe, y: calculatedPipe) => x.rank - y.rank,
   );
-  console.log("calculated pipe frictions are: ");
-  console.log(calculatedPipes);
   return calculatedPipes;
 }
 
@@ -352,14 +350,6 @@ export default function Home() {
     calculatedTube[] | calculatedPipe[]
   >([]);
 
-  const validateInput = (x: FormValues) => {
-    return (
-      formValues.CFM > 0 &&
-      formValues.goalFriction > 0 &&
-      formValues.variance > 0
-    );
-  };
-
   const initialValues: FormValues = {
     CFM: CFM_DEFAULT,
     goalFriction: FRICTION_DEFAULT,
@@ -369,20 +359,38 @@ export default function Home() {
     height: 0,
     diameter: 0,
   };
+
   const [formValues, setFormValues] = useState<FormValues>(initialValues);
 
-  console.log(formValues.CFM);
-  console.log(formValues.goalFriction);
-  setTableData(
-    calculatePipeFrictions(
-      PIPE_DIAMETERS,
-      formValues.CFM,
-      formValues.goalFriction,
-    ),
-  );
+  const validateInput = (x: FormValues) => {
+    return (
+      formValues.CFM > 0 &&
+      formValues.goalFriction > 0 &&
+      formValues.variance > 0
+    );
+  };
 
-  console.log(tableData);
-  console.log("table should be populated");
+  useEffect(() => {
+    if (validateInput(formValues)) {
+      if (formValues.conduitType === "Pipe") {
+        setTableData(
+          calculatePipeFrictions(
+            PIPE_DIAMETERS,
+            formValues.CFM,
+            formValues.goalFriction,
+          ),
+        );
+      } else {
+        setTableData(
+          calculateTubeFrictions(
+            TUBE_DIMENSIONS,
+            formValues.CFM,
+            formValues.goalFriction,
+          ),
+        );
+      }
+    }
+  }, [formValues]);
 
   return (
     <>
@@ -424,7 +432,7 @@ export default function Home() {
               </div>
             )}
           </div>
-          {
+          {tableData.length && (
             <div className={styles.tableDiv}>
               <table id="frictionTable" className={styles.frictionTable}>
                 <thead>
@@ -453,7 +461,7 @@ export default function Home() {
                 </tbody>
               </table>
             </div>
-          }
+          )}
         </div>
       </body>
     </>
