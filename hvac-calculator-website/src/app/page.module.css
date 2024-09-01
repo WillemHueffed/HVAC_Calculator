@@ -1,7 +1,3 @@
-.bodyStyle {
-  background-color: lightblue;
-}
-
 .tableDiv {
   height: 300px;
   max-width: 400px;
@@ -10,6 +6,11 @@
   overflow: auto;
   margin-left: auto;
   margin-right: auto;
+}
+
+.inputButton {
+  border: none;
+  border-radius: 0.5rem;
 }
 
 .frictionTable {

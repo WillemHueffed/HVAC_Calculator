@@ -1,5 +1,6 @@
 "use client";
 import styles from "./page.module.css";
+import "./globals.css";
 import { ChangeEvent, useState } from "react";
 
 const CFM_DEFAULT = 800;
@@ -178,25 +179,26 @@ const InputComponent: React.FC<FormValuesProp> = ({
         </form>
       </div>
       <div>
-        {/*
-        <form>
-          <input
-            type="radio"
-            value="Pipe"
-            name="conduitType"
-            onInput={handleChange}
-          />
-          <label>Pipe</label>
-          <br />
-          <input
-            type="radio"
-            value="Tube"
-            name="conduitType"
-            onInput={handleChange}
-          />
-          <label>Tube</label>
-        </form>
-        */}
+        {
+          <form>
+            <input
+              type="radio"
+              value="Pipe"
+              name="conduitType"
+              onInput={handleChange}
+              checked
+            />
+            <label>Pipe</label>
+            <br />
+            <input
+              type="radio"
+              value="Tube"
+              name="conduitType"
+              onInput={handleChange}
+            />
+            <label>Tube</label>
+          </form>
+        }
       </div>
       {/*
       <div>
@@ -292,6 +294,8 @@ function calculatePipeFrictions(
   calculatedPipes.sort(
     (x: calculatedPipe, y: calculatedPipe) => x.rank - y.rank,
   );
+  console.log("calculated pipe frictions are: ");
+  console.log(calculatedPipes);
   return calculatedPipes;
 }
 
@@ -344,7 +348,6 @@ function calculateTubeFrictions(
 }
 
 export default function Home() {
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [tableData, setTableData] = useState<
     calculatedTube[] | calculatedPipe[]
   >([]);
@@ -356,19 +359,34 @@ export default function Home() {
       formValues.variance > 0
     );
   };
+
   const initialValues: FormValues = {
     CFM: CFM_DEFAULT,
     goalFriction: FRICTION_DEFAULT,
     variance: VARIANCE_DEFAULT,
-    conduitType: "",
+    conduitType: "Pipe",
     width: 0,
     height: 0,
     diameter: 0,
   };
   const [formValues, setFormValues] = useState<FormValues>(initialValues);
+
+  console.log(formValues.CFM);
+  console.log(formValues.goalFriction);
+  setTableData(
+    calculatePipeFrictions(
+      PIPE_DIAMETERS,
+      formValues.CFM,
+      formValues.goalFriction,
+    ),
+  );
+
+  console.log(tableData);
+  console.log("table should be populated");
+
   return (
     <>
-      <body className={styles.bodyStyle}>
+      <body>
         <HeaderComponent />
         <div className={styles.container}>
           <div className={styles.inputContainer}>
@@ -378,7 +396,9 @@ export default function Home() {
             />
             {validateInput(formValues) && (
               <div className={styles.container}>
+                {/*
                 <button
+                  className={styles.inputButton}
                   onClick={(e) => {
                     setIsSubmitted(true);
                     formValues.conduitType == "Pipe"
@@ -400,10 +420,11 @@ export default function Home() {
                 >
                   Submit
                 </button>
+                */}
               </div>
             )}
           </div>
-          {isSubmitted && (
+          {
             <div className={styles.tableDiv}>
               <table id="frictionTable" className={styles.frictionTable}>
                 <thead>
@@ -432,7 +453,7 @@ export default function Home() {
                 </tbody>
               </table>
             </div>
-          )}
+          }
         </div>
       </body>
     </>
