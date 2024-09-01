@@ -185,7 +185,7 @@ const InputComponent: React.FC<FormValuesProp> = ({
               type="radio"
               value="Pipe"
               name="conduitType"
-              onInput={handleChange}
+              onChange={handleChange}
               checked
             />
             <label>Pipe</label>
@@ -194,7 +194,7 @@ const InputComponent: React.FC<FormValuesProp> = ({
               type="radio"
               value="Tube"
               name="conduitType"
-              onInput={handleChange}
+              onChange={handleChange}
             />
             <label>Tube</label>
           </form>
