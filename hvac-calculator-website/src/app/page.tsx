@@ -136,6 +136,93 @@ interface FormValues {
   diameter: number;
 }
 
+const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  if (!event.target.files) return;
+  console.log(event.target.files[0]);
+};
+
+function FileInputComponent() {
+  return (
+    <>
+      <div>
+        <input
+          name="file"
+          id="fileInput"
+          type="file"
+          accept=".csv"
+          onChange={handleFileUpload}
+          style={{ display: "none" }}
+        />
+        <label
+          htmlFor="fileInput"
+          style={{
+            cursor: "pointer",
+            background: "none",
+            border: "1px",
+            color: "black",
+            borderRadius: "2px",
+            borderWidth: "1px",
+          }}
+        >
+          Upload Custom Dimensions
+        </label>
+        {/*
+        <span id="file-name" style={{ marginLeft: "10px" }}>
+          No File Selected
+        </span>
+        */}
+      </div>
+    </>
+  );
+}
+
+const DownloadSampleCSVs = ({
+  data,
+  fileName,
+  downloadLabel,
+}: {
+  data: any[];
+  fileName: string;
+  downloadLabel: string;
+}) => {
+  const convertToCSV = (objArray: Object[]) => {
+    const array =
+      typeof objArray !== "object" ? JSON.parse(objArray) : objArray;
+    let str = "";
+
+    if (typeof objArray[0] !== "object") {
+      str = objArray.join("\r\n");
+    } else {
+      for (let i = 0; i < array.length; i++) {
+        let line = "";
+        for (let index in array[i]) {
+          if (line !== "") line += ",";
+          line += array[i][index];
+        }
+        str += line + "\r\n";
+      }
+    }
+    return str;
+  };
+
+  const downloadCSV = () => {
+    const csvData = new Blob([convertToCSV(data)], { type: "text/csv" });
+    const csvURL = URL.createObjectURL(csvData);
+    const link = document.createElement("a");
+    link.href = csvURL;
+    link.download = `${fileName}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  return (
+    <div>
+      <button onClick={downloadCSV}>{downloadLabel}</button>
+    </div>
+  );
+};
+
 const InputComponent: React.FC<FormValuesProp> = ({
   formValues,
   setFormValues,
@@ -148,7 +235,7 @@ const InputComponent: React.FC<FormValuesProp> = ({
   return (
     <>
       <div>
-        <form>
+        <form className={styles.inputForm}>
           <label>CFM</label>
           <br />
           <input
@@ -200,34 +287,29 @@ const InputComponent: React.FC<FormValuesProp> = ({
           </form>
         }
       </div>
-      {/*
-      <div>
-        {formValues.conduitType === "Pipe" && (
-          <form>
-            <label>Diameter</label>
-            <input type="number" name="diameter" onInput={handleChange} />
-          </form>
-        )}
-        {formValues.conduitType === "Tube" && (
-          <form>
-            <label>Width</label>
-            <br />
-            <input type="number" name="width" onInput={handleChange} />
-            <br />
-            <label>Height</label>
-            <br />
-            <input type="number" name="height" onInput={handleChange} />
-            <br />
-          </form>
-        )}
-      </div>
-      */}
+      <DownloadSampleCSVs
+        data={TUBE_DIMENSIONS}
+        fileName="SampleTubeData"
+        downloadLabel="Sample Tube Data"
+      />
+      <DownloadSampleCSVs
+        data={PIPE_DIAMETERS}
+        fileName="SamplePipeData"
+        downloadLabel="Sample Pipe Data"
+      />
+      <FileInputComponent />
     </>
   );
 };
 
 function HeaderComponent() {
-  return <h1 className={styles.header}>HVAC Calculator</h1>;
+  return (
+    <h1 className={styles.header}>
+      <div className={styles.headerDiv}>
+        <span>HVAC Calculator</span>
+      </div>
+    </h1>
+  );
 }
 
 function TableComponent(tableData: calculatedTube[] | calculatedPipe[]) {
@@ -247,10 +329,7 @@ function TableComponent(tableData: calculatedTube[] | calculatedPipe[]) {
             </thead>
             <tbody>
               {tableData.map((row, rowIndex) => (
-                <tr
-                  key={rowIndex}
-                  style={(styles.test, { backgroundColor: row.color })}
-                >
+                <tr key={rowIndex} style={{ backgroundColor: row.color }}>
                   {Object.keys(tableData[0])
                     .filter((column) => column !== "color" && column !== "rank")
                     .map((column) => (
@@ -439,6 +518,7 @@ export default function Home() {
               setFormValues={setFormValues}
             />
           </div>
+          <div className={styles.columnBreak}></div>
           {TableComponent(tableData)}
         </div>
       </body>

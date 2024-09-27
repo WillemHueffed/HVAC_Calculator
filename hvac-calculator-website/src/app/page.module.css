@@ -3,40 +3,78 @@
 }
 
 .inputContainerDiv {
+  padding-right: 10px;
+  background-color: hsl(0, 0%, 90%);
+  padding-left: 5px;
+  padding-top: 5px;
+}
+
+.inputContainerDiv input {
+  font-size: 16px;
+}
+
+.inputForm label {
+  font-weight: bold;
+}
+
+.inputForm input {
+  margin-bottom: 7px;
+  border-radius: 2px;
+  border: none;
+}
+
+.inputForm label {
+  padding-bottom: 5px;
 }
 
 .flexDiv {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  width: fit-content;
+  border: solid;
+  border-width: 3px;
+  border-radius: 10px;
+  border-color: hsl(0, 0%, 50%);
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.headerDiv {
+  background-color: green;
+  border-radius: 10px;
+  width: 300px;
+  margin: auto;
+}
+
+.headerDiv span {
+  color: white;
 }
 
 .tableDiv {
   max-height: 300px;
   max-width: 400px;
   font-size: 20px;
-  border: 2px solid #ccc;
+  border-left: none;
   overflow: auto;
+  background-color: hsl(0, 0%, 90%);
 }
 
 .dataTable {
-  border-collapse: separate;
-  border-spacing: 0 5px;
-  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.dataTable th {
+  padding: 4px 5px 4px 5px;
 }
 
 .dataTable td {
-  padding: 5px;
+  padding: 4px 5px 4px 5px;
 }
 
-.dataTable tr {
-  border-bottom: 100px solid #3498db;
-}
-
-.test {
-  border-bottom: 100px solid #3498db;
-}
-
-.dataTable tr:last-child {
-  border-bottom: none;
+.columnBreak {
+  width: 3px;
+  background-color: hsl(0, 0%, 50%);
 }
